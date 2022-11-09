@@ -8,7 +8,7 @@ Don't hack paid software, free software exists and does the job better.
 Features:
 ---------------------------------------------
 
-	Bash, xbrzscale imagemagick and Gnu_parallel are used.
+	Bash, xbrzscale, imagemagick and Gnu_parallel are used.
 	
 
 Upscale_ONE_FILE_image_xbrzscale.sh

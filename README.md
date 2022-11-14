@@ -4,6 +4,9 @@ Upscale image to get better quality.
 
 Don't hack paid software, free software exists and does the job better.
 
+This is a BASH frontend (gui?) is for give data into xbrzscale.
+
+No command line needed you just clich on files or folders.
 
 Features:
 ---------------------------------------------
@@ -31,6 +34,10 @@ Upscale_ALL_PARALLEL_image_xbrzscale.sh
 xbrzscale versions ?
 ---------------------------------------------
 
+You can find xbrzscale easily on internet or maybe in your package manager.
+
+site : https://github.com/atheros/xbrzscale
+
 For use with libc6 old versions:
 
 xbrzscale_1.8-2_amd64_2.30.deb
@@ -40,6 +47,22 @@ For use with libc6 new versions:
 
 xbrzscale_1.8-2_amd64_2.35.deb
 
+
+ImageMagick limitationS
+---------------------------------------------
+	Policy to change to the file :
+	sudo gedit /etc/ImageMagick-6/policy.xml
+
+![Screenshot](policy.jpg)
+
+	Tested on : ImageMagick 6.9.11-60 Q16 x86_64
+	
+	sudo gedit /etc/ImageMagick-6/policy.xml
+	
+	convert -list resource
+	
+	ImgMack policy are SO LOW you need to change them to something usable
+	ex: mem 12GiB , disk 64GiB
 
 How to ?
 ---------------------------------------------

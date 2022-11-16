@@ -6,25 +6,41 @@ Don't hack paid software, free software exists and does the job better.
 
 This is a BASH frontend (gui?) is for give data into xbrzscale.
 
-No command line needed you just clich on files or folders.
+No command line needed you just click on files or folders.
 
 Features:
 ---------------------------------------------
 
 	Bash, xbrzscale, imagemagick and Gnu_parallel are used.
-	
+	Remember if there nothing to upscale, the results will be none.
 
 Upscale_ONE_FILE_image_xbrzscale.sh
 
-	- ONE file will be upscaled
+	ONE file will be upscaled.
+	Upscale one file you specify.
+	To JPG
+	Select ONE file and upscale it.
+	Re-Compress image if you want.
 
 Upscale_ALL_FOLDER_image_xbrzscale.sh
 
-	- All file in folder will be upscaled.
+	All file in folder will be upscaled.
+	One by one file.
+	Upscale all files in folder you specified.
+	To JPG
+	Select one FOLDER and upscale all image (one by one).
+	Re-Compress image if you want.
 
 Upscale_ALL_PARALLEL_image_xbrzscale.sh
 
-	- All file in folder with Gnu_Parallel will be upscaled.
+	All file in folder with Gnu_Parallel will be upscaled.
+	You will need 'Gnu Parallel' for this one work.
+	Same as 'all folder' but with Gnu parallel.
+	Multiples job at the same time.
+	To JPG
+	Faster
+	Select one FOLDER and GNU parallel upscale it.
+	Re-Compress image if you want.
 
 ***********************_V_2211080738.sh
 
@@ -75,29 +91,8 @@ How to ?
 
 -YOU can easily edit the sources to convert to webp
 		
-Image Upscaler files:
+Image files:
 ---------------------------------------------
-
-Remember if there nothing to upscale, the results will be none.
-
-	Upscale_ONE_FILE_image_xbrzscale.sh
-		Upscale one file you specify.
-		To JPG
-		Select ONE file and upscale it.
-		Re-Compress image if you want.
-	
-	Upscale_ALL_FOLDER_image_xbrzscale.sh
-		Upscale all files in folder you specified.
-		To JPG
-		Select one FOLDER and upscale all image (one by one).
-		Re-Compress image if you want.
-
-	Upscale_ALL_PARALLEL_image_xbrzscale.sh
-		Same as 'all folder' but with gnu parallel.
-		To JPG
-		Faster
-		Select one FOLDER and GNU parallel upscale it.
-		Re-Compress image if you want.
 
 Screen of Upscale ONE FILE image xbrzscale.sh
 ![Screenshot](v5.jpg)

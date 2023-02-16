@@ -48,7 +48,7 @@ Upscale_ALL_PARALLEL_image_xbrzscale.sh
 	Select one FOLDER and GNU parallel upscale it.
 	Re-Compress image if you want.
 
-***********************_V_2211080738.sh
+********************_V_2211080738.sh
 
 	-Version of the file for easy compare.
 	
@@ -57,17 +57,15 @@ xbrzscale versions ?
 --------------------------------------------------------------------
 
 You can find xbrzscale easily on internet or maybe in your package manager.
-
 site : https://github.com/atheros/xbrzscale
 
 For use with libc6 old versions:
 
-xbrzscale_1.8-2_amd64_2.30.deb
-
+	xbrzscale_1.8-2_amd64_2.30.deb
 
 For use with libc6 new versions:
 
-xbrzscale_1.8-2_amd64_2.35.deb
+	xbrzscale_1.8-2_amd64_2.35.deb
 
 
 How to ?
@@ -93,8 +91,6 @@ ImageMagick limitationS
 	
 	sudo gedit /etc/ImageMagick-6/policy.xml
 	
-	convert -list resource
-	
 	ImgMack policy are SO LOW you need to change them to something usable
 	ex: mem 12GiB , disk 64GiB
 		
@@ -113,14 +109,16 @@ Image of the script. (Upscale_ONE_FILE_image_xbrzscale.sh)
 Compatibility
 --------------------------------------------------------------------
 Linux bash (Debian 10 & up)
+All deb distro.
 
 Versions
 --------------------------------------------------------------------
 2023-02-16 some updates
+2022-11-08 some updates
+2022-10-10 first release
 
+End-user license agreement (eula)
 --------------------------------------------------------------------
-
-	End-user license agreement (eula)
 
  	JUST DO WHAT THE F*** YOU WANT WITH THE PUBLIC LICENSE
  	

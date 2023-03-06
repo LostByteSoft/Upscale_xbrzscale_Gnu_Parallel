@@ -99,12 +99,18 @@ Image files:
 
 Screen of Upscale ONE FILE image xbrzscale.sh
 ![Screenshot](v5.jpg)
+
 Original image file.
 ![Screenshot](sca_ori.jpg)
+
 Upscaled image file.
 ![Screenshot](sca_up.jpg)
+
 Image of the script. (Upscale_ONE_FILE_image_xbrzscale.sh)
 ![Screenshot](v6.jpg)
+
+Select folder:
+![Screenshot](v7.png)
 
 Compatibility
 --------------------------------------------------------------------

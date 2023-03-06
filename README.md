@@ -20,7 +20,9 @@ Features:
 Files
 --------------------------------------------------------------------
 
-Upscale_ONE_FILE_image_xbrzscale.sh
+*** represent the version of the bash program.
+
+Upscale_ONE_FILE_image_xbrzscale***.sh
 
 	ONE file will be upscaled.
 	Upscale one file you specify.
@@ -28,7 +30,7 @@ Upscale_ONE_FILE_image_xbrzscale.sh
 	Select ONE file and upscale it.
 	Re-Compress image if you want.
 
-Upscale_ALL_FOLDER_image_xbrzscale.sh
+Upscale_ALL_FOLDER_image_xbrzscale***.sh
 
 	All file in folder will be upscaled.
 	One by one file.
@@ -37,7 +39,7 @@ Upscale_ALL_FOLDER_image_xbrzscale.sh
 	Select one FOLDER and upscale all image (one by one).
 	Re-Compress image if you want.
 
-Upscale_ALL_PARALLEL_image_xbrzscale.sh
+Upscale_ALL_PARALLEL_image_xbrzscale***.sh
 
 	All file in folder with Gnu_Parallel will be upscaled.
 	You will need 'Gnu Parallel' for this one work.
@@ -47,10 +49,6 @@ Upscale_ALL_PARALLEL_image_xbrzscale.sh
 	Faster
 	Select one FOLDER and GNU parallel upscale it.
 	Re-Compress image if you want.
-
-********************_V_2211080738.sh
-
-	-Version of the file for easy compare.
 	
 
 xbrzscale versions ?
@@ -98,18 +96,23 @@ Image files:
 --------------------------------------------------------------------
 
 Screen of Upscale ONE FILE image xbrzscale.sh
+
 ![Screenshot](v5.jpg)
 
 Original image file.
+
 ![Screenshot](sca_ori.jpg)
 
 Upscaled image file.
+
 ![Screenshot](sca_up.jpg)
 
 Image of the script. (Upscale_ONE_FILE_image_xbrzscale.sh)
+
 ![Screenshot](v6.jpg)
 
 Select folder:
+
 ![Screenshot](v7.png)
 
 Compatibility
@@ -119,6 +122,7 @@ All deb distro.
 
 Versions
 --------------------------------------------------------------------
+2023-03-05 somes updates to files
 2023-02-16 some updates
 2022-11-08 some updates
 2022-10-10 first release

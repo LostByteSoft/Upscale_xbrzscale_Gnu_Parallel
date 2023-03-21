@@ -7,7 +7,7 @@ Upscale image to get better quality.
 
 Don't hack paid software, free software exists and does the job better.
 
-This is a BASH frontend (gui?) is for gave data into xbrzscale.
+This is a BASH frontend (gui?) is for give data into xbrzscale.
 
 No command line needed you just click on files or folders.
 

@@ -122,10 +122,16 @@ All deb distro.
 
 Versions
 --------------------------------------------------------------------
+2024-12-17 minor fixes
+
 2023-03-05 somes updates to files
+
 2023-02-16 some updates
+
 2022-11-08 some updates
+
 2022-10-10 first release
+
 
 End-user license agreement (eula)
 --------------------------------------------------------------------

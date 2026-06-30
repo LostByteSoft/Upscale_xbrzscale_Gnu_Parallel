@@ -49,7 +49,24 @@ Upscale_ALL_PARALLEL_image_xbrzscale***.sh
 	Faster
 	Select one FOLDER and GNU parallel upscale it.
 	Re-Compress image if you want.
-	
+
+
+TWO NEW VERSION JUST ADDED 2026-06-30
+
+Upscale_ALL_FOLDER_PROGRESSIVE_image_xbrzscale_V_202606301743
+
+Upscale_ALL_FOLDER_PROGRESSIVE_PARALLEL_image_xbrzscale_V_202606301749
+
+	They do all the same thing. But they are progressive on the ratio on scalling.
+
+	width -lt 1750 value=6 - 1750 * 6 = 10500
+	width -lt 2000 value=5 - 2000 * 5 = 10000
+	width -lt 2500 value=4 - 2500 * 4 = 10000
+	width -lt 3400 value=3 - 3400 * 3 = 10200
+	width -lt 5000 value=2 - 5000 * 2 = 10000
+
+	Final output will be more or less 10000px
+
 
 xbrzscale versions ?
 --------------------------------------------------------------------
@@ -64,6 +81,8 @@ For use with libc6 old versions:
 For use with libc6 new versions:
 
 	xbrzscale_1.8-2_amd64_2.35.deb
+
+Install form your source is manage is the best.
 
 
 How to ?
@@ -115,6 +134,10 @@ Select folder:
 
 ![Screenshot](v7.png)
 
+Progressive
+
+![Screenshot](progressive.jpg)
+
 Compatibility
 --------------------------------------------------------------------
 Linux bash (Debian 10 & up)
@@ -122,6 +145,9 @@ All deb distro.
 
 Versions
 --------------------------------------------------------------------
+
+2026-06-30 progressive versions
+
 2024-12-17 minor fixes
 
 2023-03-05 somes updates to files

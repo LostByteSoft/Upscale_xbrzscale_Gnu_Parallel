@@ -1,0 +1,1625 @@
+#!/bin/bash
+#!/usr/bin/ffmpeg
+
+	echo "-------------------------===== Start of bash ====-------------------------"
+	printf '\033[8;27;90t'	## minimum of 90 for graphics.
+	version=2026-07-01_Wednesday_12:18:15
+
+	## "0 or 1 , 0 deactivated , 1 activated ## All general variables must be 0 or 1"
+		findsubfolders=0
+		lowercase=0
+		detox=0
+		automatic=0
+		debug=0
+		debugcore=0
+		minimize=0
+		maximize=0
+		reseize=1
+		noquit=1
+
+	SCRIPT_NAME=$(basename "$0")
+	echo -ne "\033]0;$SCRIPT_NAME\a"
+	printf '\033[8;20;90t'		## minimum of 90 for graphics.
+	echo
+
+## -------------------------=========== SEPARATOR =============-------------------------
+	## Time, host name, file name, pid.
+		start=$SECONDS
+		now=$(date +"%Y-%m-%d_%H:%M:%S")	## time now
+		hostname=$(cat /etc/hostname)
+		#hostname="${hostname%-pc}"
+		me="$(basename "$(test -L "$0" && readlink "$0" || echo "$0")")"
+		id=$(echo $PPID)			## current process id of the bash process
+	## General purposes variables. Needed before program to random variables.
+		logs=1		## Logging
+	## All general variables must be 0, DO NOT CHANGE.
+		part=0		## Don't change this value.
+		primeerror=0	## Ending error detector, do not change.
+		error=0		## Test error, do not change.
+	## Auto-generated variables. DO NOT CHANGE.
+		random=$(shuf -i 131072-524288 -n 1)	# Used for temp folders. A big number hard to guess for security reasons. 128-512
+		random2=$RANDOM
+	## Colors codes
+		red=$(tput setaf 1)
+		green=$(tput setaf 2)
+		yellow=$(tput setaf 11)
+		blue=$(tput setaf 12)
+		orange=$(tput setaf 9)
+		reset=$(tput sgr0)
+	## Name of the pc you are running this bash.
+		comuputerrunning=$(hostname)
+		comuputerrunning=${comuputerrunning//-pc/}
+
+## -------------------------=========== SEPARATOR =============-------------------------
+
+	echo
+	echo "${green}  ░▒▓█▓▒░      ░▒▓██████▓▒░ ░▒▓███████▓▒░▒▓████████▓▒░ "
+	echo "${green}  ░▒▓█▓▒░     ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░         ░▒▓█▓▒░     "
+	echo "${green}  ░▒▓█▓▒░     ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░         ░▒▓█▓▒░     "
+	echo "${green}  ░▒▓█▓▒░     ░▒▓█▓▒░░▒▓█▓▒░░▒▓██████▓▒░   ░▒▓█▓▒░     "
+	echo "${green}  ░▒▓█▓▒░     ░▒▓█▓▒░░▒▓█▓▒░      ░▒▓█▓▒░  ░▒▓█▓▒░     "
+	echo "${green}  ░▒▓█▓▒░     ░▒▓█▓▒░░▒▓█▓▒░      ░▒▓█▓▒░  ░▒▓█▓▒░     "
+	echo "${green}  ░▒▓████████▓▒░▒▓██████▓▒░░▒▓███████▓▒░   ░▒▓█▓▒░     ${reset}"
+	echo
+	echo "${green}	  ░▒▓███████▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓████████▓▒░▒▓████████▓▒░ "
+	echo "${green}	  ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░  ░▒▓█▓▒░   ░▒▓█▓▒░        "
+	echo "${green}	  ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░  ░▒▓█▓▒░   ░▒▓█▓▒░        "
+	echo "${green}	  ░▒▓███████▓▒░ ░▒▓██████▓▒░   ░▒▓█▓▒░   ░▒▓██████▓▒░   "
+	echo "${green}	  ░▒▓█▓▒░░▒▓█▓▒░  ░▒▓█▓▒░      ░▒▓█▓▒░   ░▒▓█▓▒░        "
+	echo "${green}	  ░▒▓█▓▒░░▒▓█▓▒░  ░▒▓█▓▒░      ░▒▓█▓▒░   ░▒▓█▓▒░        "
+	echo "${green}	  ░▒▓███████▓▒░   ░▒▓█▓▒░      ░▒▓█▓▒░   ░▒▓████████▓▒░ ${reset}"
+	echo
+	echo "${green}		   ░▒▓███████▓▒░░▒▓██████▓▒░░▒▓████████▓▒░▒▓████████▓▒░ "
+	echo "${green}		  ░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░         ░▒▓█▓▒░     "
+	echo "${green}		  ░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░         ░▒▓█▓▒░     "
+	echo "${green}		   ░▒▓██████▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓██████▓▒░    ░▒▓█▓▒░     "
+	echo "${green}			 ░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░         ░▒▓█▓▒░     "
+	echo "${green}			 ░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░         ░▒▓█▓▒░     "
+	echo "${green}		  ░▒▓███████▓▒░ ░▒▓██████▓▒░░▒▓█▓▒░         ░▒▓█▓▒░  ${reset}"
+	echo
+
+echo -------------------------=========== SEPARATOR =============-------------------------
+	echo "Lead-in Version 6.09. LostByteSoft ; https://github.com/LostByteSoft"
+	echo
+	echo "${blue}█████${reset} Activated $me"
+	echo
+	echo "Version : $version"
+	echo
+	echo "NEVER remove dual ## in front of lines. Theses are code annotations."
+	echo "You can test / remove single # for testing purpose."
+	echo
+	echo "Current time : $now"
+	echo
+	echo "You are running this script from : $comuputerrunning"
+	echo
+	echo "Running software file : $(dirname "$0")/"
+	echo
+	echo "Read me for this file : (EULA at the end of file, open in text.)"
+	echo "By LostByteSoft, no copyright or copyleft. https://github.com/LostByteSoft"
+	echo "Don't hack paid software, free software exists and does the job better."
+	echo
+	echo "Debug data : id=$id part=$part primeerror=$primeerror error=$error random=$random random2=$random2 logs=$logs"
+	echo "	findsubfolders=$findsubfolders lowercase=$lowercase detox=$detox automatic=$automatic debug=$debug"
+	echo "	debugcore=$debugcore minimize=$minimize maximize=$maximize reseize=$reseize noquit=$noquit"
+	echo
+	echo "My slogan is: IF you're smarter than me; THEN do it yourself FI"
+	echo
+
+echo -------------------------=========== SEPARATOR =============-------------------------
+	echo "Color codes / Informations."
+	echo
+	echo   "${blue}	████████████████      INFORMATION(S)      ████████████████ ${reset}"
+	echo  "${green}	████████████████     ALL OK / ACTIVE      ████████████████ ${reset}"
+	echo "${yellow}	████████████████   ATTENTION / INACTIVE   ████████████████ ${reset}"
+	echo "${orange}	████████████████                          ████████████████ ${reset}"
+	echo    "${red}	████████████████   FATAL ERROR / OFFLINE  ████████████████ ${reset}"
+	echo
+
+part=$((part+1))
+echo "-------------------------===== Section $part =====-------------------------"
+	echo Check installed requirements !
+	echo
+if command -v xdotool >/dev/null 2>&1
+	then
+		echo "xdotool installed continue."
+		dpkg -s xdotool | grep Version
+		echo "${green}████████████████ OK ████████████████ ${reset}"
+		echo
+		xdotoolinstall=1
+	else
+		echo "You don't have ' xdotool ' installed."
+		echo "Add with : sudo apt-get install xdotool"
+		echo
+		echo "${blue}████████████████ Dependency information ████████████████${reset}"
+		echo
+		xdotoolinstall=0
+	fi
+
+## -------------------------===== Separator =====-------------------------
+if command -v xbrzscale >/dev/null 2>&1
+	then
+		echo "xbrzscale installed continue."
+		dpkg -s xbrzscale | grep Version
+		echo "${green} ████████████████ OK ████████████████ ${reset}"
+		echo
+		xbrzscaleinstall=1
+	else
+		echo "You don't have ' xbrzscale ' installed."
+		echo "Add with : sudo apt-get install xbrzscale"
+		echo
+		echo "${red}████████████████ Dependency error ████████████████${reset}"
+		echo
+		read -n 1 -s -r -p "Press ENTER key to continue anyway (NOT a good idea) !"
+		echo
+		echo
+		xbrzscaleinstall=0
+	fi
+
+## -------------------------===== Separator =====-------------------------
+if command -v imagemagick >/dev/null 2>&1
+	then
+		echo "You don't have ' imagemagick ' installed."
+		echo "Add with : sudo apt-get install imagemagick"
+		echo
+		echo "${red}████████████████ Dependency error ████████████████${reset}"
+		echo
+		read -n 1 -s -r -p "Press ENTER key to continue anyway (NOT a good idea) !"
+		echo
+		echo
+		imagemagickinstall=1
+	else
+		echo "imagemagick installed continue."
+		dpkg -s imagemagick | grep Version
+		echo "${green} ████████████████ OK ████████████████ ${reset}"
+		echo
+		imagemagickinstall=0
+	fi
+
+## -------------------------===== Separator =====-------------------------
+if command -v parallel >/dev/null 2>&1
+	then
+		echo "Parallel installed continue."
+		dpkg -s parallel | grep Version
+		echo "${green} ████████████████ OK ████████████████ ${reset}"
+		echo
+		parallelinstall=1
+	else
+		echo "You don't have ' parallel ' installed."
+		echo "Add with : sudo apt-get install parallel"
+		echo
+		echo "${red}████████████████ Dependency error ████████████████${reset}"
+		echo
+		read -n 1 -s -r -p "Press ENTER key to continue anyway (NOT a good idea) !"
+		echo
+		echo
+		parallelinstall=0
+	fi
+
+## -------------------------===== Separator =====-------------------------
+part=$((part+1))
+echo -------------------------===== Section $part =====-------------------------
+echo "Functions informations. Version 1.25"
+	echo
+
+##-------------------------=========== SEPARATOR =============-------------------------
+
+	name=AUTOMATIC
+	explain="The lowest possible questions/pause."
+	if [ "$automatic" -eq "0" ]; then
+		echo 	"Function ${green}█████${reset} Default deactivated $name . $explain"
+	else
+		echo 	"Function ${blue}█████${reset} Activated $name . $explain"
+	fi
+	echo
+
+##-------------------------=========== SEPARATOR =============-------------------------
+
+	name=DEBUG
+	explain="Slow down execution with informations."
+	if [ "$debug" -eq "0" ]; then
+		echo 	"Function ${green}█████${reset} Default deactivated $name . $explain"
+	else
+		echo 	"Function ${blue}█████${reset} Activated $name . $explain"
+	fi
+	echo
+
+	debug() {
+		if [ "$debug" -eq "1" ]; then
+			echo
+			echo "${blue}	█████ DEBUG █████${reset}"
+			echo
+			echo "Debug data : id=$id part=$part primeerror=$primeerror error=$error random=$random random2=$random2 logs=$logs"
+			echo "	findsubfolders=$findsubfolders lowercase=$lowercase detox=$detox automatic=$automatic debug=$debug"
+			echo "	debugcore=$debugcore minimize=$minimize maximize=$maximize reseize=$reseize noquit=$noquit"
+			echo
+			reseize=0
+			minimize=0
+			maximize=0
+			noquit=1
+			printf '\033[8;45;150t'		## Will resize the window.
+			fi
+			}
+
+##-------------------------=========== SEPARATOR =============-------------------------
+## error function
+
+	error() {
+		if [ "$?" -ge 1 ]; then
+			reseize=0
+			noquit=1
+			automatic=0
+			primeerror=$((primeerror+1))
+			echo
+			echo "${red}████████████████████ ERROR was detected !!! ████████████████████${reset}"
+			debug
+			sleep 1
+		else
+			echo
+			echo "${green} █████████ No error found. █████████ ${reset}"
+			echo
+			fi
+		}
+
+##-------------------------=========== SEPARATOR =============-------------------------
+
+	name=NOQUIT
+	explain="Do not quit at the end of the program."
+	if [ "$noquit" -eq "0" ]; then
+		echo 	"Function ${blue}█████${reset} Default deactivated $name . $explain"
+	else
+		echo 	"Function ${green}█████${reset} Activated $name . $explain"
+	fi
+	echo
+
+##-------------------------=========== SEPARATOR =============-------------------------
+
+	name=MINIMIZE
+	explain="Minimize the program."
+	if [ "$minimize" -eq "0" ]; then
+		echo 	"Function ${blue}█████${reset} Default deactivated $name . $explain"
+	else
+		echo 	"Function ${green}█████${reset} Activated $name . $explain"
+	fi
+
+if [ "$minimize" -eq "1" ]; then
+	pid=$(echo $PPID)
+	if [ "$xdotoolinstall" -eq "1" ]; then
+			echo
+			echo "Function ${blue}█████ Minimize activated. ${yellow}pid = $pid${reset}${reset}"
+			sleep 0.2
+			window_id=$(xdotool search --pid $pid | tail -1)
+			sleep 0.2
+			#echo pid = $pid | window_id = $window_id
+			xdotool windowminimize "$window_id"
+			sleep 0.2
+		else
+			echo "${yellow} █████ xdotool not installed : pid = $pid${reset}"
+		fi
+	fi
+	echo
+
+##-------------------------=========== SEPARATOR =============-------------------------
+
+	name=MAXIMIZE
+	explain="Maximize the program."
+	if [ "$maximize" -eq "0" ]; then
+		echo 	"Function ${blue}█████${reset} Default deactivated $name . $explain"
+	else
+		echo 	"Function ${green}█████${reset} Activated $name . $explain"
+	fi
+
+if [ "$maximize" -eq "1" ]; then
+	pid=$(echo $PPID)
+	if [ "$xdotoolinstall" -eq "1" ]; then
+			echo "Function ${blue}█████ Maximize activated. ${yellow}pid = $pid${reset}"
+			sleep 0.2
+			window_id=$(xdotool search --pid $pid | tail -1)
+			sleep 0.2
+			#echo pid = $pid | window_id = $window_id
+			xdotool windowmaximize "$window_id"
+			sleep 0.2
+		else
+			echo "${yellow}█████ xdotool not installed : pid = $pid${reset}"
+		fi
+	fi
+
+##-------------------------=========== SEPARATOR =============-------------------------
+## Simple function small bar to wait 3 sec. This bar does work with debian 12 & 13. Version 1.05
+
+	functionsmallbar() {
+		speed=0.3
+		echo -ne ${yellow}'	TimeToQuit |                        |    (0%)\r'${reset}
+		sleep "$speed"
+		echo -ne ${yellow}'	TimeToQuit |  ██                    |   (10%)\r'${reset}
+		sleep "$speed"
+		echo -ne ${yellow}'	TimeToQuit |  ████                  |   (20%)\r'${reset}
+		sleep "$speed"
+		echo -ne ${yellow}'	TimeToQuit |  ██████                |   (30%)\r'${reset}
+		sleep "$speed"
+		echo -ne ${yellow}'	TimeToQuit |  ████████              |   (40%)\r'${reset}
+		sleep "$speed"
+		echo -ne ${yellow}'	TimeToQuit |  ██████████            |   (50%)\r'${reset}
+		sleep "$speed"
+		echo -ne ${yellow}'	TimeToQuit |  ████████████          |   (60%)\r'${reset}
+		sleep "$speed"
+		echo -ne ${yellow}'	TimeToQuit |  ██████████████        |   (70%)\r'${reset}
+		sleep "$speed"
+		echo -ne ${yellow}'	TimeToQuit |  ████████████████      |   (80%)\r'${reset}
+		sleep "$speed"
+		echo -ne ${yellow}'	TimeToQuit |  ██████████████████    |   (90%)\r'${reset}
+		sleep "$speed"
+		echo -ne ${yellow}'	TimeToQuit |  ████████████████████  |  (100%)\r'${reset}
+		sleep "$speed"
+		echo -ne '\n'
+		}
+
+## -------------------------===== Separator =====-------------------------
+## Simple function sleep bar to wait. Wait the time you specified in code.
+	## Version 2.26
+	## https://github.com/LostByteSoft
+	## LostBytesSoft, lost byte softwares, because everything is ephemeral.
+	## Replace the nothing show sleep with a better looking bar.
+	## SPECIFY A SLEEP TIME IN SECONDS BEFORE FUNCTION IN CODE. Default sleep is 3 second if not specified.
+
+	## In code exemple:
+	## sleep=3		## Use minimum 1 as a vriable.
+	## functionsleepbar
+
+	## Local var.
+	sleep=3
+	sleep1=0
+	sleep2=0
+	
+	##-------------------------=========== SEPARATOR =============-------------------------
+
+functionsleepbar() {
+
+	if [ "$sleep" -ge "1" ]; then
+			sleep1=$(echo "scale=2 ; "$sleep"/20" | bc)
+			sleep2=$(echo "scale=2 ; "$sleep"/10" | bc)
+		else
+			sleep=3
+			sleep1=$(echo "scale=2 ; "$sleep"/20" | bc)
+			sleep2=$(echo "scale=2 ; "$sleep"/10" | bc)
+		fi
+
+	#if [[ -n "$color" ]]; then
+	#		echo "color is $color"
+	#	else
+	#		color=green
+	#		echo "color is set to $color"
+	#	fi
+
+	echo -ne ${green}"Sleep time $sleep sec. ${blue}	|	|	|	|	|	|        (0%)\r"${reset}
+	sleep "$sleep2"
+	echo -ne ${green}"Sleep time $sleep sec. ${blue}	|██	|	|	|	|	|        (5%)\r"${reset}
+	sleep "$sleep1"
+	echo -ne ${green}"Sleep time $sleep sec. ${blue}	|█████	|	|	|	|	|	(10%)\r"${reset}
+	sleep "$sleep1"
+	echo -ne ${green}"Sleep time $sleep sec. ${blue}	|███████|	|	|	|	|	(15%)\r"${reset}
+	sleep "$sleep1"
+	echo -ne ${green}"Sleep time $sleep sec. ${blue}	|███████|█	|	|	|	|	(20%)\r"${reset}
+	sleep "$sleep1"
+	echo -ne ${green}"Sleep time $sleep sec. ${blue}	|███████|███	|	|	|	|	(25%)\r"${reset}
+	sleep "$sleep1"
+	echo -ne ${green}"Sleep time $sleep sec. ${blue}	|███████|█████	|	|	|	|	(30%)\r"${reset}
+	sleep "$sleep1"
+	echo -ne ${green}"Sleep time $sleep sec. ${blue}	|███████|███████|	|	|	|	(35%)\r"${reset}
+	sleep "$sleep1"
+	echo -ne ${green}"Sleep time $sleep sec. ${blue}	|███████|███████|█	|	|	|	(40%)\r"${reset}
+	sleep "$sleep1"
+	echo -ne ${green}"Sleep time $sleep sec. ${blue}	|███████|███████|███	|	|	|	(45%)\r"${reset}
+	sleep "$sleep1"
+	echo -ne ${green}"Sleep time $sleep sec. ${blue}	|███████|███████|█████	|	|	|	(50%)\r"${reset}
+	sleep "$sleep1"
+	echo -ne ${green}"Sleep time $sleep sec. ${blue}	|███████|███████|███████|	|	|	(55%)\r"${reset}
+	sleep "$sleep1"
+	echo -ne ${green}"Sleep time $sleep sec. ${blue}	|███████|███████|███████|█	|	|	(60%)\r"${reset}
+	sleep "$sleep1"
+	echo -ne ${green}"Sleep time $sleep sec. ${blue}	|███████|███████|███████|███	|	|	(65%)\r"${reset}
+	sleep "$sleep1"
+	echo -ne ${green}"Sleep time $sleep sec. ${blue}	|███████|███████|███████|█████	|	|	(70%)\r"${reset}
+	sleep "$sleep1"
+	echo -ne ${green}"Sleep time $sleep sec. ${blue}	|███████|███████|███████|███████|	|	(75%)\r"${reset}
+	sleep "$sleep1"
+	echo -ne ${green}"Sleep time $sleep sec. ${blue}	|███████|███████|███████|███████|█	|	(80%)\r"${reset}
+	sleep "$sleep1"
+	echo -ne ${green}"Sleep time $sleep sec. ${blue}	|███████|███████|███████|███████|███	|	(90%)\r"${reset}
+	sleep "$sleep1"
+	echo -ne ${green}"Sleep time $sleep sec. ${blue}	|███████|███████|███████|███████|█████	|	(95%)\r"${reset}
+	sleep "$sleep1"
+	echo -ne ${green}"Sleep time $sleep sec. ${blue}	|███████|███████|███████|███████|███████|      (100%)\r"${reset}
+	sleep "$sleep1"
+	echo -ne '\n'
+	}
+
+##-------------------------=========== SEPARATOR =============-------------------------
+## Simple function bar to TimeOut 12 sec.
+	## Version 2.03
+	## https://github.com/LostByteSoft
+	## LostBytesSoft, lost byte softwares, because everything is ephemeral.
+
+	functionfastbar() {
+		echo -ne ${blue}'	TimeOut |                        |    (0%)\r'${reset}
+		sleep 1
+		echo -ne ${blue}'	TimeOut |  █                     |   (5%)\r'${reset}
+		sleep 0.6
+		echo -ne ${blue}'	TimeOut |  ██                    |   (10%)\r'${reset}
+		sleep 0.6
+		echo -ne ${blue}'	TimeOut |  ███                   |   (15%)\r'${reset}
+		sleep 0.6
+		echo -ne ${blue}'	TimeOut |  ████                  |   (20%)\r'${reset}
+		sleep 0.6
+		echo -ne ${blue}'	TimeOut |  █████                 |   (25%)\r'${reset}
+		sleep 0.6
+		echo -ne ${blue}'	TimeOut |  ██████                |   (30%)\r'${reset}
+		sleep 0.6
+		echo -ne ${blue}'	TimeOut |  ███████               |   (35%)\r'${reset}
+		sleep 0.6
+		echo -ne ${blue}'	TimeOut |  ████████              |   (40%)\r'${reset}
+		sleep 0.6
+		echo -ne ${blue}'	TimeOut |  █████████             |   (45%)\r'${reset}
+		sleep 0.6
+		echo -ne ${blue}'	TimeOut |  ██████████            |   (50%)\r'${reset}
+		sleep 0.6
+		echo -ne ${blue}'	TimeOut |  ███████████           |   (55%)\r'${reset}
+		sleep 0.6
+		echo -ne ${blue}'	TimeOut |  ████████████          |   (60%)\r'${reset}
+		sleep 0.6
+		echo -ne ${blue}'	TimeOut |  █████████████         |   (65%)\r'${reset}
+		sleep 0.6
+		echo -ne ${blue}'	TimeOut |  ██████████████        |   (70%)\r'${reset}
+		sleep 0.6
+		echo -ne ${blue}'	TimeOut |  ███████████████       |   (75%)\r'${reset}
+		sleep 0.6
+		echo -ne ${blue}'	TimeOut |  ████████████████      |   (80%)\r'${reset}
+		sleep 0.6
+		echo -ne ${blue}'	TimeOut |  █████████████████     |   (85%)\r'${reset}
+		sleep 0.6
+		echo -ne ${blue}'	TimeOut |  ██████████████████    |   (90%)\r'${reset}
+		sleep 0.6
+		echo -ne ${blue}'	TimeOut |  ███████████████████   |   (95%)\r'${reset}
+		sleep 0.6
+		echo -ne ${blue}'	TimeOut |  ████████████████████  |  (100%)\r'${reset}
+		sleep 0.6
+		echo -ne '\n'
+		}
+
+##-------------------------=========== SEPARATOR =============-------------------------
+echo 
+part=1
+echo -------------------------===== Section $part =====-------------------------
+echo "Names not supported / Informations."
+	echo
+	echo "${blue}	████████████████████████████████████████████████████████████████${reset}"
+	echo "		!!! NAMES starting with symbols are NOT SUPPORTED !!!"
+	echo "${blue}	████████████████████████████████████████████████████████████████${reset}"
+	echo
+
+echo -------------------------========================-------------------------
+echo "Select folder or filename using dialog ! Version 2,00"
+	echo
+	#debug=1
+
+if [ "$automatic" -eq 1 ] ; then
+	## to do automatic
+	startauto=1
+	fi
+
+## -------------------------===== Separator =====-------------------------
+
+folderselector () {
+	if [ "$automatic" -eq 0 ] ; then
+		#file="$(zenity --file-selection --filename=$HOME/ --title="Select a file, all format supported")"			## File select.
+		file=$(zenity --file-selection --filename=$HOME/ --title="Choose a directory to convert all file" --directory)	## Directory select.
+		## file="/$HOME/Pictures/"
+		## file="/$HOME/Downloads/"
+		## --file-filter="*.jpg *.gif"
+		## --file-filter='*[WwEeBbPp] | *[JjPpGg]'
+	else
+		file="/$HOME/Downloads"
+	fi
+
+	count=`ls -1 "$file" 2>/dev/null | wc -l`
+	if [ $count -ge "1" ]; then
+		echo Count : $count
+		echo
+		echo "You have selected :"
+		echo "$file"
+		echo
+		fi
+
+	if [ "$count" -eq 0 ]; then	## for n files in directory
+		automatic=0
+		echo "You don't have selected a folder including files !"
+		echo
+		echo "${blue}█████ This folder does not includes files. $HOME/Downloads is empty. █████${reset}"
+		echo
+		echo "Select a folder including files or click CANCEL."
+		echo
+		folderselector
+		fi
+
+	}	## end function
+
+	folderselector
+
+## -------------------------===== Separator =====-------------------------
+
+### file or folder
+	if test -z "$file"; then	## for cancel on zenity
+		echo "You click CANCEL !"
+		echo
+		echo "${yellow}█████████████████████ NO DATA TO PROCESS █████████████████████${reset}"
+		echo
+		read -n 1 -s -r -p "Press any key to EXIT"
+		echo
+		exit 0
+		fi
+
+	if [ "$debug" -eq "1" ]; then
+		debug
+		echo file = $file
+		echo
+		echo "${blue}	█████ DEBUG WAIT █████${reset}"
+		echo
+		sleep=3
+		functionsleepbar
+		echo
+		fi
+
+## -------------------------===== Separator =====-------------------------
+
+if [ "$startauto" -eq 1 ] ; then
+	## put back automatic start
+	automatic=1
+	fi
+	
+echo -------------------------========================-------------------------
+## Version 4,00
+## Input_Directory_Output
+	echo "Input name, directory and output name : (Debug helper)"
+	echo
+
+## Set working path.
+	BASEDIR=$(dirname "$0")
+	echo Basedir : "$BASEDIR"
+	dir=$(pwd)
+
+## file or folder selected
+	echo "Working dir : "$dir""
+	echo Input file : "$file"
+	export VAR="$file"
+	echo
+
+## directory section
+	INPUT="$(dirname "${VAR}")"	
+	echo "Get the last Folder : ${INPUT##*/}"
+	echo Base directory : "$(dirname "${VAR}")"
+	echo Base name: "$(basename "${VAR}")"
+	echo
+
+## Output file name
+	name=`echo "$file" | rev | cut -f 2- -d '.' | rev` ## remove extension
+	echo "Output name ext : "$name""
+	name1=`echo "$(basename "${VAR}")" | rev | cut -f 2- -d '.' | rev` ## remove extension
+	#echo "Output name bis 1 : "$name1""
+	name1="$name1"
+	echo "Output name bis : "$name1""
+	echo
+
+## Debug data
+	echo "Debug data : debug=$debug error=$error part=$part noquit=$noquit random=$random random2=$random2"
+	echo "		primeerror=$primeerror lowercase=$lowercase id=$id reseize=$reseize"
+	echo
+	if [ "$debug" -eq "1" ]; then
+		debug
+		echo "${blue}		█████ DEBUG WAIT █████${reset}"
+		echo
+		echo "Debug data: $file"
+		echo
+		sleep=3
+		functionsleepbar
+		echo
+		fi
+
+echo -------------------------========================-------------------------
+echo "Job lock Version 2,05"
+	echo
+	## local var
+	runningjob=0
+	#debug=1
+	
+	if [ -f /dev/shm/job.lock ]; then
+		echo "${red} █████████ Lock-up already exist. Waiting for job finish. █████████ ${reset}"
+		echo
+		fi
+
+## -------------------------===== Separator =====-------------------------
+
+function_zenitywait () {
+	(
+	echo "10" ; sleep 1
+	echo "20" ; sleep 1
+	echo "30" ; sleep 1
+	echo "40" ; sleep 1
+	echo "50" ; sleep 1
+	echo "60" ; sleep 1
+	echo "70" ; sleep 1
+	echo "80" ; sleep 1
+	echo "90" ; sleep 1
+	echo "100" ; sleep 1
+	) |
+	zenity --progress --width 400 --height 150 --title="Checker ; Lock-up already exist." \
+	--text="\nWaiting for job finish... or press Cancel to remove lock-up.\n\n" --timeout 10
+
+	if [ $? -eq 1 ] ; then
+		rm "/dev/shm/job.lock" 2> /dev/null
+		runningjob=1
+		fi
+
+	}	## End function function_zenitywait
+
+	while [ -f /dev/shm/job.lock ]	## Watch if file exist
+		do
+		#echo "Debug : If file exist goto loop checker !"
+		function_zenitywait
+		done
+	
+	if [ $runningjob -eq 1 ] ; then
+		touch /dev/shm/job.lock
+		runningjob=0
+		fi
+	
+	choice=$?
+
+## -------------------------===== Separator =====-------------------------
+
+	if [ ! -f /dev/shm/job.lock ]; then
+		echo "${blue} █████████ A lock will be created to prevent running multiples jobs. █████████ ${reset}"
+		echo
+		## Create a file to lock up!
+		touch /dev/shm/job.lock
+		runningjob=0
+		fi
+
+	if [ "$debug" -eq 1 ]; then
+		echo
+		debug
+		echo "	Debug Job lock Unlock job"
+		echo
+		echo "	Debug job lock : choice = $choice runningjob = $runningjob"
+		echo
+		read -n 1 -s -r -p "Press ENTER key to continue !"
+		echo
+		fi
+
+part=$((part+1))
+echo "-------------------------===== Section $part =====-------------------------"
+echo UpScale finder... Mover
+	echo
+
+	rm "/dev/shm/findups.txt" 2> /dev/null
+	countfind=0
+	countfind=`ls -1 "$file"/*UpScale.* 2>/dev/null | wc -l`
+	echo UpScaled files search and count is : $countfind
+	find "$file" -maxdepth 1 -iname "*UpScale.*"  >> "/dev/shm/findups.txt"
+
+	if [ $countfind -ge "1" ]; then
+		echo
+		cat /dev/shm/findups.txt
+		echo
+		fi
+
+## -------------------------===== Separator =====-------------------------
+
+	if [ $countfind -ge "1" ]; then
+	if zenity --no-wrap --question --text="UpScale files detected, do you want to MOVE them to ""$file"/AlreadyDone/" ?.\n\nUpScaled files can by done multiples times but takes very high usage of ram."
+			then
+				echo Moving files...
+				echo """$file""/AlreadyDone/"
+				mkdir """$file""/AlreadyDone/"
+				echo
+			{
+				input="/dev/shm/findups.txt"
+				while IFS= read -r "line"
+				do
+				echo Output : "$line"
+				mv "$line" """$file""/AlreadyDone/"
+				## echo Output : "$HOME/Desktop/"$line""
+				## mv  "$line" "$HOME"/Desktop/""
+				done < "$input"
+			}
+			fi
+	fi
+
+	rm "/dev/shm/findups.txt" 2> /dev/null
+	error $?
+
+echo -------------------------========================-------------------------
+echo Gif finder... Mover
+	echo
+
+	rm "/dev/shm/findgif.txt" 2> /dev/null
+	count=0
+	count=`ls -1 "$file"/*.gif 2>/dev/null | wc -l`
+
+	echo GIF files search and count is : $count
+	find "$file" -maxdepth 1 -iname "*.gif"  >> "/dev/shm/findgif.txt"
+
+	if [ $count -ge "1" ]; then
+		echo
+		cat "/dev/shm/findvideo.txt"
+		echo
+		fi
+
+## -------------------------===== Separator =====-------------------------
+
+	if [ $count != 0 ]; then
+		if zenity --no-wrap --question --text="Gif files detected, do you want to MOVE them to ""$file"/Gif" ?\n\n\tFiles are NOT compatibles JPG / UpScalables."
+			then
+				echo Moving files...
+				mkdir ""$file"/Gif/"
+				echo
+			{
+				input="/dev/shm/findgif.txt"
+				while IFS= read -r "line"
+				do
+				echo Output : "$line"
+				#mv "$line" ""$HOME"/Videos"
+				mv  "$line" ""$file"/Gif/"
+				done < "$input"
+			}
+		fi
+	echo
+	fi
+	
+	rm "/dev/shm/findgif.txt" 2> /dev/null
+	error $?
+
+part=$((part+1))
+echo "-------------------------===== Section $part =====-------------------------"
+echo Avif finder... Mover / Converter
+	echo
+
+	rm "/dev/shm/findavif.txt" 2> /dev/null
+	count=0
+	count=`ls -1 "$file"/*.avif 2>/dev/null | wc -l`
+
+	echo Avif files search and count is : $count
+	find "$file" -maxdepth 1 -iname "*.avif"  >> "/dev/shm/findavif.txt"
+
+	if [ $count -ge "1" ]; then
+		echo
+		cat "/dev/shm/findvideo.txt"
+		echo
+		fi
+
+## -------------------------===== Separator =====-------------------------
+
+	if [ $count != 0 ]; then
+		if zenity --no-wrap --question --text="avif files detected, do you want to CONVERT them ?\n\n\tFiles are NOT compatibles JPG / UpScalables. (Suggest YES)"
+			then
+				echo Converting files...
+				echo
+			{
+			input="/dev/shm/findavif.txt"
+				while IFS= read -r "line"
+				do
+				echo "$line"_convert.jpg
+				convert "$line" -format jpg "$line"_convert.jpg
+				done < "$input"
+			}
+		fi
+
+## -------------------------===== Separator =====-------------------------
+
+	if zenity --no-wrap --question --text="avif files detected, do you want to MOVE them to ""$file"/Avif" ?\n\n\tFiles are NOT compatibles JPG / UpScalables. (Suggest YES)"
+		then
+			echo Moving files...
+			mkdir ""$file"/Avif/"
+			echo
+		{
+			input="/dev/shm/findavif.txt"
+			while IFS= read -r "line"
+			do
+			echo Output : "$line"
+			#mv "$line" "$HOME"/Desktop/""
+			mv "$line" ""$file"/Avif/"
+			done < "$input"
+		}
+		fi
+	fi
+
+	rm "/dev/shm/findavif.txt" 2> /dev/null
+	error $?
+
+part=$((part+1))
+echo "-------------------------===== Section $part =====-------------------------"
+echo Video finder... Mover
+	echo
+	
+	## local var, resetted at end if not needed
+	countfind=0
+	rm "/dev/shm/findvideo.txt" 2> /dev/null
+
+	## Easy way to add a file format, copy paste a new line.
+	echo "Will NOT find files in sub folders.... Remove -maxdepth 1 to search subfolders."
+
+	find "$file" -maxdepth 1 -iname '*.MP4'  >> "/dev/shm/findvideo.txt"
+	find "$file" -maxdepth 1 -iname '*.MKV'  >> "/dev/shm/findvideo.txt"
+	find "$file" -maxdepth 1 -iname '*.WEBM'  >> "/dev/shm/findvideo.txt"
+	find "$file" -maxdepth 1 -iname '*.AVI'  >> "/dev/shm/findvideo.txt"
+
+	countfind=`ls -2 "/dev/shm/findvideo.txt" 2>/dev/null | wc -l`
+	echo Video files search and count is : $countfind
+
+	if [ $countfind -ge "1" ]; then
+		echo
+		cat "/dev/shm/findvideo.txt"
+		echo
+		fi
+
+## -------------------------===== Separator =====-------------------------
+
+	if [ $countfind -ge "1" ]; then
+		if zenity --no-wrap --question --text="Video files detected, do you want to MOVE them to ""$file"/Video" ?\n\n\tFiles are NOT compatibles JPG / UpScalables."
+			then
+				echo Moving files...
+				mkdir ""$file"/Video/"
+				echo
+			{
+				input="/dev/shm/findvideo.txt"
+				while IFS= read -r "line"
+				do
+				echo Output : "$line"
+				#mv "$line" ""$HOME"/Videos"
+				mv  "$line" ""$file"/Video/"
+				done < "$input"
+			}
+		fi
+	fi
+
+	rm "/dev/shm/findvideo.txt" 2> /dev/null
+	error $?
+
+part=$((part+1))
+echo "-------------------------===== Section $part =====-------------------------"
+echo "The core/code program. Version 3.12"
+	echo
+	rm "/dev/shm/findimg.txt" 2> /dev/null
+	rm "/dev/shm/findimg1.txt" 2> /dev/null
+	rm "/dev/shm/xbrscale.txt" 2> /dev/null
+
+	conv=0
+	entry2=0
+
+	#debugcore=1
+
+## -------------------------===== Separator =====-------------------------
+
+	echo "Software name: Upscale image(s)"
+	echo
+	echo Example:
+	echo xbrzscale
+	echo usage: xbrzscale scale_factor input_image output_image
+	echo scale_factor can be between 2 and 6
+	echo
+	echo Informations :
+	echo
+	echo JPEG is also defined with the additional extensions: jpg jpe jif jfif and jfi
+	echo Animated gif or webp are not supported
+	echo
+	echo Known bugs :
+	echo
+	echo "Images bigger than 10000x10000 create errors if you don't have change imagemagick policy."
+	echo
+	echo https://github.com/atheros/xbrzscale
+	echo https://jaibeermalik.wordpress.com/2012/10/18/imagemagick-mogrify-vs-convert-which-one-to-use-and-when/
+	echo
+	echo "By LostByteSoft, no copyright or copyleft"
+	echo "https://github.com/LostByteSoft"
+	echo
+	echo "Don't hack paid software, free software exists and does the job better."
+	echo
+
+## -------------------------===== Separator =====-------------------------
+
+	debugcore()	{
+		if [ "$debugcore" -eq 1 ]; then
+		noquit=1
+		echo
+		echo "file = $file"
+		echo "input = $input"
+		echo
+		echo "automatic=$automatic debugcore=$debugcore conv=$conv entry2=$entry2"
+		echo
+		echo "error=$error primeerror=$primeerror"
+		echo
+		fi
+		}
+
+	if [ "$debugcore" -eq 1 ]; then
+		echo
+		echo "Debug msg050"
+		debugcore
+		fi
+
+part=$((part+1))
+echo "-------------------------===== Section $part =====-------------------------"
+
+echo "Numbers of xbrzscale scale_factor"
+	echo
+	echo "Progressive select. For each files pixel are verified and:"
+	echo
+	echo "width -lt 1750 value=6 1750 * 6 = 10500"
+	echo "width -lt 2000 value=5 2000 * 5 = 10000"
+	echo "width -lt 2500 value=4 2500 * 4 = 10000"
+	echo "width -lt 3400 value=3 3400 * 3 = 10200"
+	echo "width -lt 5000 value=2 5000 * 2 = 10000"
+	echo
+	echo "Final output will be more or less 10000px"
+	echo
+
+	if [ "$debugcore" -eq 1 ]; then
+		#echo
+		echo "Debug msg071"
+		debugcore
+		fi
+
+part=$((part+1))
+echo "-------------------------===== Section $part =====-------------------------"
+echo Finding files...
+	echo
+
+	## Easy way to add a file format, copy paste a new line.
+	echo "Will NOT find files in sub folders."
+	
+	#find "$file" -maxdepth 1 -iname '*.AVIF'  >> "/dev/shm/gen/find.txt"		## Compatibility problems, not fully supported, converted first.
+	find "$file" -maxdepth 1 -iname '*.BMP'  >> "/dev/shm/findimg.txt"
+	find "$file" -maxdepth 1 -iname '*.GIF'  >> "/dev/shm/findimg.txt"
+	find "$file" -maxdepth 1 -iname '*.JPEG'  >> "/dev/shm/findimg.txt"
+	find "$file" -maxdepth 1 -iname '*.JPG_MEDIUM'  >> "/dev/shm/findimg.txt"
+	find "$file" -maxdepth 1 -iname '*.JPG_LARGE'  >> "/dev/shm/findimg.txt"
+	find "$file" -maxdepth 1 -iname '*.JPG'  >> "/dev/shm/findimg.txt"
+	find "$file" -maxdepth 1 -iname '*.PNG'  >> "/dev/shm/findimg.txt"
+	find "$file" -maxdepth 1 -iname '*.TIF'  >> "/dev/shm/findimg.txt"
+	find "$file" -maxdepth 1 -iname '*.TIFF'  >> "/dev/shm/findimg.txt"
+	find "$file" -maxdepth 1 -iname '*.WEBP'  >> "/dev/shm/findimg.txt"
+	find "$file" -maxdepth 1 -iname '*.OPDOWNLOAD'  >> "/dev/shm/findimg.txt"
+	echo
+
+	lines=$(wc -l < "/dev/shm/findimg.txt")
+	echo Finding finish, with file count : $lines
+	echo
+
+	if [ "$debugcore" -eq 1 ]; then
+		#echo
+		echo "Debug msg102"
+		echo
+		echo ---
+		cat "/dev/shm/findimg.txt"
+		echo ---
+		fi
+	
+	if [ "$lines" -eq "0" ]; then
+		echo "You don't have selected a folder with IMAGES files, now exit in 3 seconds."
+		echo
+		echo -------------------------========================-------------------------
+		sleep 3
+		exit
+	fi
+
+	if [ "$debugcore" -eq "0" ]; then
+			printf '\033[8;25;200t'		## will resize the window.
+		else
+			printf '\033[8;45;200t'		## will resize the window.
+		fi
+
+	if [ "$debugcore" -eq 1 ]; then
+		#echo
+		echo "Debug msg131"
+		debugcore
+		fi
+
+part=$((part+1))
+echo "-------------------------===== Section $part =====-------------------------"
+echo "xbrzscale upscale progressive command"
+	echo
+	echo "Conversion started..."
+	echo "Parallel convert many file at a time. Run 50% of the number of CPU cores available on your machine."
+
+##-------------------------=========== SEPARATOR =============-------------------------
+
+input="/dev/shm/findimg.txt"
+
+process_image() {
+    local img="$1"
+    local width entry2
+
+    [[ -z "$img" ]] && return
+    [ -f "$img" ] || { echo "Warning: File not found → $img" >&2; return; }
+
+    width=$(identify -format "%w" "$img" 2>/dev/null)
+
+    if ! [[ "$width" =~ ^[0-9]+$ ]]; then
+        echo "Warning: Could not read width → $img" >&2
+        return
+    fi
+
+	## Assign scaling value based on width
+        if [ "$width" -lt 1750 ]; then
+            entry2=6
+        elif [ "$width" -lt 2000 ]; then
+            entry2=5
+        elif [ "$width" -lt 2500 ]; then
+            entry2=4
+        elif [ "$width" -lt 3400 ]; then
+            entry2=3
+        elif [ "$width" -lt 5000 ]; then
+            entry2=2
+        else
+            entry2=2
+        fi
+
+	echo "XbrzScale | Value: $entry2 | Width: $width | File: $img" | tee -a "/dev/shm/xbrscale.txt"
+	xbrzscale "$entry2" "$img" "${img%.*}_UpScale.jpg" #2> /dev/null
+}
+
+export -f process_image
+
+# Run with GNU Parallel
+#parallel --jobs 4 --progress --eta --line-buffer --jobs 50% process_image :::: "$input"
+parallel --progress --eta --line-buffer --jobs 50% process_image :::: "$input"
+
+##-------------------------=========== SEPARATOR =============-------------------------
+
+	error $?
+
+	if [ "$debugcore" -eq 1 ]; then
+		echo
+		echo "Debug msg196"
+		debugcore
+		fi
+
+part=$((part+1))
+echo "-------------------------===== Section $part =====-------------------------"
+echo "Reconvert (Yes or No (Suggest Yes))"
+	echo
+	conv=0
+	count2=0
+
+	if [ "$debug" -eq "1" ]; then
+		debug
+		echo file = $file
+		echo
+		echo "${blue}		█████ DEBUG WAIT █████${reset}"
+		echo
+		sleep=3
+		functionsleepbar
+		echo
+		fi
+
+	if [ "$automatic" -eq 0 ]; then
+		if zenity --no-wrap --question --text="Do you want to reconvert to save space ?\n\n\t(Yes or No (Suggest Yes))"
+			then
+				echo Convert to jpg / webp, parallel REconversion. Find UpScaled files..
+				echo "find "$file" -maxdepth 1 -iname 'UpScale'  >> "/dev/shm/findimg1.txt""
+				## find "/$HOME/Desktop" -maxdepth 1 -iname '*UpScale.webp'  >> "/dev/shm/findimg.txt"
+				#find "$file" -maxdepth 1 -iname '*UpScale.webp'  >> "/dev/shm/findimg.txt"	## webp
+				find "$file" -maxdepth 1 -iname '*UpScale.jpg'  >> "/dev/shm/findimg1.txt"		## jpg
+				#cat "/dev/shm/findimg.txt"
+				count2=$(wc -l < "/dev/shm/findimg1.txt")
+				echo File count : $count2
+				echo
+
+			part=$((part+1))
+			echo "-------------------------===== Section $part =====-------------------------"
+				echo Convert started...
+				echo
+				## convert to jpg or webp
+				{
+				input="/dev/shm/findimg.txt"		## gedit "/dev/shm/findimg.txt"
+				while IFS= read -r "line"; do
+					conv=$((conv+1))
+					#convert "$line" -define webp:lossless=true -format webp "$line"		## webp
+					echo "Number $conv | mogrify -format jpg -resize 100% -quality 90 | "$line"" | tee -a "/dev/shm/xbrscale.txt"
+					mogrify -format jpg -resize 100% -quality 90 "$line"
+					done < "$input"
+				}
+			echo "Conversion finish..."
+			echo
+			#echo "Auto reconverted."
+			#echo
+		else
+			echo "No reconverted. (Manual only choice.)"
+			echo
+		fi
+	else
+				echo Convert to jpg / webp, parallel REconversion. Find UpScaled files..
+				echo "find "$file" -maxdepth 1 -iname 'UpScale'  >> "/dev/shm/findimg1.txt""
+				## find "/$HOME/Desktop" -maxdepth 1 -iname '*UpScale.webp'  >> "/dev/shm/findimg.txt"
+				#find "$file" -maxdepth 1 -iname '*UpScale.webp'  >> "/dev/shm/findimg.txt"	## webp
+				find "$file" -maxdepth 1 -iname '*UpScale.jpg'  >> "/dev/shm/findimg1.txt"		## jpg
+				#cat "/dev/shm/findimg.txt"
+				count2=$(wc -l < "/dev/shm/findimg1.txt")
+				echo File count : $count2
+				echo
+
+			part=$((part+1))
+			echo "-------------------------===== Section $part =====-------------------------"
+				echo Convert started...
+				echo
+				## convert to jpg or webp
+				{
+				input="/dev/shm/findimg.txt"		## gedit "/dev/shm/findimg.txt"
+				while IFS= read -r "line"; do
+					conv=$((conv+1))
+					#convert "$line" -define webp:lossless=true -format webp "$line"		## webp
+					echo "Number $conv | mogrify -format jpg -resize 100% -quality 90 | "$line"" | tee -a "/dev/shm/xbrscale.txt"
+					mogrify -format jpg -resize 100% -quality 90 "$line"
+					done < "$input"
+				}
+			#echo "Conversion finish..."
+			echo
+			echo "Auto reconverted."
+			echo
+	fi
+
+##-------------------------=========== SEPARATOR =============-------------------------
+
+	if [ "$debugcore" -eq 1 ]; then
+		#echo
+		echo "Debug msg237"
+		debugcore
+		echo Show logs
+		echo ---
+		cat "/dev/shm/xbrscale.txt"
+		echo ---
+		read -n 1 -s -r -p "Press any key to continue."
+		echo
+		echo
+		fi
+
+part=$((part+1))
+echo "-------------------------===== Section $part =====-------------------------"
+echo Move files to new folder?
+	nowtime1=$(date +"%Y-%m-%d_%H:%M:%S")
+	echo
+	echo Create folder...
+	mkdir -p "$file"/UpScale_$nowtime1
+	echo Move files... to "$file"/UpScale_$nowtime1
+	#echo "$file"/*_UpScale* "$file"/UpScale
+	mv "$file"/*_UpScale* "$file"/UpScale_$nowtime1		## mv /home/master/Downloads/*UpScale.jpg /home/master/Downloads$file/UpScale
+
+	if [ "$debugcore" -eq 1 ]; then
+		#echo
+		echo "Debug msg251"
+		echo
+		echo "nowtime1 = $nowtime1"
+		debugcore
+		fi
+
+part=$((part+1))
+echo "-------------------------===== Section $part =====-------------------------"
+echo Verify numbers of files...
+	## Variable
+	subfolder="UpScale_$nowtime1"
+	finaldir="$file"/"$subfolder"
+	echo "Final dir : "$file"/"$subfolder""
+	echo
+
+	if [ "$debugcore" -eq 1 ]; then
+		#echo
+		echo "Debug msg270"
+		debugcore
+		read -n 1 -s -r -p "Press any key to continue."
+		echo
+		echo
+		fi
+
+	rm "/dev/shm/findimg.txt" 2> /dev/null
+	rm "/dev/shm/findimg1.txt" 2> /dev/null
+
+part=$((part+1))
+echo "-------------------------===== Section $part =====-------------------------"
+echo "Files in folder counter / checker. Version 1,08"
+	echo
+	# var for section
+	count1=0
+	count2=0
+	#debug=1		## debug purposes, activate if you want.
+	
+	if [ "$debug" -eq "1" ]; then
+		debug
+		echo "${blue}	█████ DEBUG WAIT , start compare ! █████${reset}"
+		echo
+		read -n 1 -s -r -p "Press ENTER key to continue !"
+		echo
+		echo
+		fi
+	
+## -------------------------========================-------------------------
+## first folder
+	##file1="/dev/shm/$random"
+	echo "	Origin : $file"
+	#file=$(zenity  --file-selection --filename=$HOME/ --title="Choose a directory to convert all file" --directory)
+	count1=`find "$file" -maxdepth 1 -type f | wc -l`
+	#echo Count 1 = $count1
+
+## -------------------------========================-------------------------
+## second filder
+	file2="""$file"/"$subfolder"
+	#file2=$(zenity  --file-selection --filename=$HOME/ --title="Choose a directory to convert all file" --directory)
+	echo "	Save : """$file"/"$subfolder""
+	count2=`find "$file2" -maxdepth 1 -type f | wc -l`
+	#echo Count 2 = $count2
+	echo
+	
+## -------------------------========================-------------------------
+echo "Total numbers of files in folders :"
+	echo
+	echo "	Origin folder : $count1 | Modified or results : $count2"
+	echo
+	echo "The answer is .... :"
+
+	if [ "$debug" -eq "1" ]; then
+		debug
+		echo "${blue}	█████ DEBUG WAIT , The answer is .... : █████${reset}"
+		echo
+		echo Count1 = $count1 Count2 = $count2
+		echo
+		read -n 1 -s -r -p "Press ENTER key to continue !"
+		echo
+		echo
+		fi
+
+		if [ "$count1" = "$count2" ]; then
+			echo
+			echo "		${green}████████████████████████████████████████${reset}"
+			echo "		${green}██                                    ██${reset}"
+			echo "		${green}██     Numbers of files are EQUAL     ██${reset}"
+			echo "		${green}██                                    ██${reset}"
+			echo "		${green}████████████████████████████████████████${reset}"
+			fi
+	
+		if [ "$count1" -ne "$count2" ]; then
+			echo
+			echo "		${red}████████████████████████████████████████████${reset}"
+			echo "		${red}██                                        ██${reset}"
+			echo "		${red}██     Numbers of files are NOT EQUAL     ██${reset}"
+			echo "		${red}██                                        ██${reset}"
+			echo "		${red}████████████████████████████████████████████${reset}"
+			
+			primeerror=$((primeerror+1))
+			noquit=1	# No quit after detecting an error.
+			#debug=1	# Debug if numbers of files are not equal
+			echo
+	
+	## fi after files check if numbers are not equal
+	## -------------------------========================-------------------------
+	## Finding files... if not equal
+	echo "Will NOT find files in sub folders... 20240611062615"
+	cd "$file" && find -maxdepth 1 -name "*.*" | rev | cut -f 2- -d '.' | rev >> "/dev/shm/file1.txt"
+	#cat "/dev/shm/file1.txt"
+	## Finding files... 2
+	#echo "Will NOT find files in sub folders..."
+	cd "$file2" && find -maxdepth 1 -name "*.*" | rev | cut -f 2- -d '_' | rev >> "/dev/shm/file2.txt"
+	#cat "/dev/shm/file2.txt"
+	sort /dev/shm/file1.txt > /dev/shm/file11.txt
+	sort /dev/shm/file2.txt > /dev/shm/file22.txt
+	sed -i '1d' "/dev/shm/file11.txt"	## remove first line
+	sed -i '1d' "/dev/shm/file22.txt"
+	
+	part=$((part+1))
+	echo "-------------------------===== Section $part =====-------------------------"
+	echo "Verify 2 files for differences."
+	echo
+	echo diff -s -q "/dev/shm/file11.txt" "/dev/shm/file22.txt"
+	echo
+	diff -s -q "/dev/shm/file11.txt" "/dev/shm/file22.txt"
+	active=$(echo $?)
+	#echo $active
+		if [ "$active" -ge "1" ]
+			then
+			echo
+			primeerror=$((primeerror+1))
+			echo "${red} ███████████████ VERIFY FILES ███████████████ ${reset}"
+			fi
+		if [ "$active" -eq "0" ]
+			then
+			echo
+			echo "${green} ██████████████████████████████ ${reset}"
+			fi
+
+	echo
+	part=$((part+1))
+	echo "-------------------------===== Section $part =====-------------------------"
+	echo "Comparaison of files :"
+	echo
+	echo diff --side-by-side --suppress-common-lines "/dev/shm/file11.txt" "/dev/shm/file22.txt"
+	echo
+	diff --side-by-side --suppress-common-lines "/dev/shm/file11.txt" "/dev/shm/file22.txt"
+
+	active=$(echo $?)
+		#echo $active
+		if [ "$active" -ge "1" ]
+			then
+			echo
+			primeerror=$((primeerror+1))
+			echo "${red} ███████████████ VERIFY FILES ███████████████ ${reset}"
+			fi
+		if [ "$active" -eq "0" ]
+			then
+			echo
+			echo "${green} ██████████████████████████████ ${reset}"
+			fi
+		fi
+
+	if [ "$debug" -eq "1" ]; then
+		debug
+		echo "${blue}		█████ DEBUG WAIT , end compare !█████${reset}"
+		echo
+		read -n 1 -s -r -p "Press ENTER key to continue !"
+		echo
+		fi
+
+	## del temp files
+	rm "/dev/shm/file1.txt" 2> /dev/null
+	rm "/dev/shm/file2.txt" 2> /dev/null
+	rm "/dev/shm/file11.txt" 2> /dev/null
+	rm "/dev/shm/file22.txt" 2> /dev/null
+	echo
+
+part=$((part+1))
+echo "-------------------------===== Section $part =====-------------------------"
+echo "Unlock ssh nodes. Version 1.04"
+	echo
+
+	if [ "$runningjob" -eq 0 ]; then
+		rm "/dev/shm/job.lock" 2> /dev/null
+		echo "${green} █████████ Computer released, new jobs available. █████████ ${reset}"
+		echo
+	else
+		echo "${red} █████████ Had work in calculation and will not be unlocked. █████████ ${reset}"
+		echo
+		fi
+
+part=$((part+1))
+echo "-------------------------===== Section $part =====-------------------------"
+echo "Checker Zero Files. Finding files..."
+	echo
+	echo 	"Fail safe ${green}█████${reset} Checker Zero Files. Scan files for zero bytes."
+	
+	rm "/dev/shm/findzero.txt" 2> /dev/null
+	rm "/dev/shm/empty.txt" 2> /dev/null
+	
+	emptyfiles=0
+	number5=0
+
+	file5="$file"
+	find "$file5" -name 'lost+found' -prune -o -name 'run' -prune -o -iname '*'  >> "/dev/shm/findzero.txt"
+
+	lines5=$(wc -l < "/dev/shm/findzero.txt")
+	
+	if [ "$lines5" -ge "1" ]; then
+	{
+	input="/dev/shm/findzero.txt"
+		while IFS= read -r "file6"
+		do
+		if [ -s "$file6" ]; then
+			number5=$((number5+1))
+		else
+			number5=$((number5+1))
+			emptyfiles=$((emptyfiles+1))
+			primeerror=$((primeerror+1))
+			noquit=1			# No quit after detecting an error.
+			echo $file6 >> /dev/shm/empty.txt
+		fi
+		done < "$input"
+	}
+
+	number5=$((number5-1))	## need to remove 1 file, folder name count.
+	echo
+	echo Number of files checked : $number5
+	echo
+
+	if [ "$emptyfiles" -eq "0" ]; then
+			echo "		${green}█████ NO empty files found █████${reset}"
+			sleep 1
+		else
+			echo "		${red}████████████████████████████████████████████${reset}"
+			echo "		${red}██                                        ██${reset}"
+			echo "		${red}██           Empty files found            ██${reset}"
+			echo "		${red}██                                        ██${reset}"
+			echo "		${red}████████████████████████████████████████████${reset}"
+			echo
+			echo "Numbers of empty files : $emptyfiles"
+			echo
+			echo -------------------------===== Listing start =====-------------------------
+			echo
+			cat /dev/shm/empty.txt
+			echo
+			echo -------------------------===== Listing end =====-------------------------
+			echo
+			noquit=1
+			read -n 1 -s -r -p "Press ENTER key to Continue ! You can close this windows."
+			echo
+		fi
+	else
+		echo "You don't have selected a folder with files, function canceled."
+	fi
+
+## -------------------------===== Separator =====-------------------------
+
+	if [ "$debug" -eq 1 ]; then
+		debug
+		echo "${blue}		█████ DEBUG WAIT , end zerofiles █████${reset}"
+		echo
+		read -n 1 -s -r -p "Press ENTER key to continue !"
+		echo
+		fi
+	echo
+
+## -------------------------===== Separator =====-------------------------
+
+	rm "/dev/shm/empty.txt" 2> /dev/null
+	rm "/dev/shm/findzero.txt" 2> /dev/null 2> /dev/null
+
+part=$((part+1))
+echo "-------------------------===== Section $part =====-------------------------"
+echo "Software lead out. Version 7.36"
+	echo
+
+## -------------------------===== Start of eula =====-------------------------
+	functioneula() {
+		printf '\033[8;33;90t'		## Will resize the window.
+		echo
+		echo "End-user license agreement (eula)"
+		echo
+	 	echo "JUST DO WHAT THE F*** YOU WANT WITH THE PUBLIC LICENSE"
+		echo	 	
+	 	echo "Version 3.1415926532 (January 2022)"
+		echo
+	 	echo "TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION"
+		echo
+		echo "Everyone is permitted to copy and distribute verbatim or modified copies of"
+	 	echo "this license document."
+		echo
+	 	echo "As is customary and in compliance with current global and interplanetary"
+	 	echo "regulations, the author of these pages disclaims all liability for the"
+	 	echo "consequences of the advice given here, in particular in the event of partial"
+	 	echo "or total destruction of the material, Loss of rights to the manufacturer"
+	 	echo "warranty, electrocution, drowning, divorce, civil war, the effects of radiation"
+	 	echo "due to atomic fission, unexpected tax recalls or encounters with"
+	 	echo "extraterrestrial beings elsewhere."
+		echo
+	 	echo "YOU MUST ACCEPT THESES TERMS OR NOTHING WILL HAPPEN."
+		echo
+	 	echo "LostByteSoft no copyright or copyleft we are in the center."
+		echo
+	 	echo "You can send your request and your Christmas wishes to this address:"
+		echo
+	 	echo "	Père Noël"
+	 	echo " 	Pôle Nord, Canada"
+	 	echo "	H0H 0H0"
+	 	echo
+	 	}
+
+## -------------------------===== Separator =====-------------------------
+	echo "Debug random : id=$id part=$part primeerror=$primeerror error=$error random=$random random2=$random2"
+	echo
+	echo "Debug : findsubfolders=$findsubfolders lowercase=$lowercase detox=$detox automatic=$automatic"
+	echo "	debug=$debug debugcore=$debugcore minimize=$minimize maximize=$maximize reseize=$reseize noquit=$noquit"
+	echo
+	echo -------------------------===== End of Bash ======-------------------------
+	echo
+	echo "Finish... with numbers of actions : $part"
+	echo "This script take $(( SECONDS - start )) seconds to complete."
+	echo "Started Time : $now"
+	date=$(date -d@$(( SECONDS - start )) -u +%H:%M:%S)
+	echo "Time needed: $date"
+	now5=$(date +"%Y-%m-%d_%A_%H:%M:%S")
+	echo "Current time : $now5"
+	echo
+
+## -------------------------===== Separator =====-------------------------
+
+	if [ "$logs" -eq "1" ]; then
+		echo " " >> /dev/shm/logs.txt
+		echo "	Time now : $now5" >> /dev/shm/logs.txt
+		echo "	Time needed : $date" >> /dev/shm/logs.txt
+		echo "	Started Time : $now" >> /dev/shm/logs.txt
+		echo "	Name of software : $me" >> /dev/shm/logs.txt
+		echo "	Debug random : id=$id part=$part primeerror=$primeerror error=$error random=$random random2=$random2" >> /dev/shm/logs.txt
+		echo "	Debug : findsubfolders=$findsubfolders lowercase=$lowercase detox=$detox automatic=$automatic debug=$debug debugcore=$debugcore \
+		minimize=$minimize maximize=$maximize reseize=$reseize noquit=$noquit" >> /dev/shm/logs.txt
+		echo "	File (If any used) : $file" >>/dev/shm/logs.txt
+		echo " " >>/dev/shm/logs.txt
+		echo "--------------------====== SEPARATOR ========--------------------" >>/dev/shm/logs.txt
+		fi
+
+## -------------------------===== Separator =====-------------------------
+## Exit, wait or auto-quit.
+
+	echo -ne "\033]0;FINISH-$SCRIPT_NAME\a"
+
+	if [ "$primeerror" -ge "1" ]; then
+		printf '\033[8;20;90t'		## Will resize the window.
+		echo "${red}████████████████████████████████████████████${reset}	${yellow}████████████████████████████████████████${reset}"
+		echo "${red}██                                        ██${reset}	${yellow}██                                    ██${reset}"
+		echo "${red}██     Unknown entry event... ERROR(S)    ██${reset}	${yellow}██       Time needed : $date       ██${reset}"
+		echo "${red}██                                        ██${reset}	${yellow}██                                    ██${reset}"
+		echo "${red}████████████████████████████████████████████${reset}	${yellow}████████████████████████████████████████${reset}"
+		echo
+		echo "Numbers of error(s) : $primeerror"
+		echo
+		echo "Terminated : $me"
+		echo
+		noquit=1
+	else
+
+		printf '\033[8;20;90t'		## Will resize the window.
+		echo "${green}████████████████████████████████████████${reset}	${blue}████████████████████████████████████████${reset}"
+		echo "${green}██                                    ██${reset}	${blue}██                                    ██${reset}"
+		echo "${green}██         NO errors detected.        ██${reset}	${blue}██       Time needed : $date       ██${reset}"
+		echo "${green}██                                    ██${reset}	${blue}██                                    ██${reset}"
+		echo "${green}████████████████████████████████████████${reset}	${blue}████████████████████████████████████████${reset}"
+		echo
+		echo "Terminated : $me"
+		echo
+	fi
+
+	## -------------------------===== Separator =====-------------------------
+	if [ "$noquit" -eq "1" ]; then
+		if [ "$primeerror" -eq "0" ]; then
+				echo "${blue}	█████████████████ NO exit activated ███████████████████${reset}"
+			else
+				echo "${orange}	█████████████████ NO exit activated ███████████████████${reset}"
+			fi
+		echo
+		while true; do 
+			echo "Press ANYKEY to show EULA, ENTER or SPACE to EXIT." 
+			read -r -n 1 -s input_key
+			if [[ -n "input_key" ]]; then 
+				if [[ "input_key" == " " || -z "$input_key" ]]; then 
+					break 
+				else
+					functioneula
+					read -n 1 -s -r -p "Press any key to EXIT." 
+					echo
+					break
+				fi 
+			else
+					break 
+				fi 
+			done
+			echo
+			fi
+
+	## -------------------------===== Separator =====-------------------------
+	if [ "$debug" -eq "1" ]; then
+		debug
+		echo "${blue}		█████ DEBUG WAIT | Program finish. █████${reset}"
+		echo
+		read -n 1 -s -r -p "Press any key to EXIT or press X to close this windows !"
+		echo
+		echo
+		exit 0
+		fi
+
+	## -------------------------===== Separator =====-------------------------
+
+	echo "${green}	███████████████ Finish, quit in 3 seconds █████████████████${reset}"
+	echo
+	if [ "$debugcore" -eq "0" ]; then
+		sleep=3
+		functionsmallbar
+	else
+		sleep=1
+		functionsmallbar
+	fi
+	echo
+	exit 0
+
+## -------------------------===== End of file =====-------------------------
